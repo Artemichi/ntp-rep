@@ -2,6 +2,9 @@ import React, { useState, useEffect, useContext } from 'react'
 import { AuthContext } from '../database/Auth'
 import app from '../database/firebase'
 import ChatsList from './ChatsList'
+import ChatView from './ChatView'
+
+import Container from '@material-ui/core/Container'
 
 const Chats = ({ history }) => {
   const currentUser = useContext(AuthContext)
@@ -22,28 +25,33 @@ const Chats = ({ history }) => {
         })
     }
     getChats()
-  }, [])
+  }, [currentUser.email])
 
   const openNewChat = () => {
     setNewChatVisible((prev) => !prev)
     setSelectedChat(null)
   }
 
-  const selectChat = (idx) => {
-    console.log(idx)
-  }
-
   return (
-    <div>
+    <Container
+      maxWidth='lg'
+      style={{
+        display: 'flex',
+        justifyContent: 'space-around',
+      }}
+    >
       <ChatsList
         history={history}
         openNewChat={openNewChat}
-        selectChat={selectChat}
+        selectChat={setSelectedChat}
         chats={chats}
         userEmail={currentUser.email}
         selectedChatIdx={selectedChat}
       />
-    </div>
+      {newChatVisible ? null : (
+        <ChatView user={currentUser.email} chat={chats[selectedChat]} />
+      )}
+    </Container>
   )
 }
 

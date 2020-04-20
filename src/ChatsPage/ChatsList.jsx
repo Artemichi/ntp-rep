@@ -20,10 +20,8 @@ const ChatsList = ({
 }) => {
   const createNewChat = () => {}
 
-  const selectC = () => {}
-
   return (
-    <div style={{ position: 'absolute', left: 0, width: '30em' }}>
+    <div style={{ width: '30em' }}>
       <Button
         variant='outlined'
         fullWidth
@@ -38,7 +36,7 @@ const ChatsList = ({
               return (
                 <div key={i}>
                   <ListItem
-                    onClick={selectC}
+                    onClick={() => selectChat(i)}
                     selected={selectedChatIdx === i}
                     alignItems='flex-start'
                   >

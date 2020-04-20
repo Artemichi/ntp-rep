@@ -20,3 +20,26 @@
   width: 80px !important;
   height: 80px !important;
 }
+
+/* CHATS */
+
+.content {
+  height: 100vh;
+  overflow: auto;
+  padding: 25px;
+  overflow-y: scroll;
+  width: 50em;
+}
+
+.userSent {
+  float: left;
+  clear: both;
+  padding: 1em;
+  word-wrap: break-word;
+}
+.friendSent {
+  float: right;
+  clear: both;
+  padding: 1em;
+  word-wrap: break-word;
+}
