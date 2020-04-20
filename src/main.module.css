@@ -1,0 +1,22 @@
+/* NAVIGATION */
+.bottomNavBar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+/* PROFILE */
+.profilePaper {
+  width: 30em;
+  padding: 1em;
+}
+.profileContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.avatarImg {
+  width: 80px !important;
+  height: 80px !important;
+}

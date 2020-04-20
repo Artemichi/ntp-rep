@@ -1,17 +1,21 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { withRouter, Redirect } from 'react-router'
-import app from '../DB/firebase'
-import { AuthContext } from '../DB/Auth'
+import app from '../database/firebase'
+import { AuthContext } from '../database/Auth'
+import logo from '../assets/logo.png'
 
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
-import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 
 const Login = ({ history }) => {
+  const [err, setErr] = useState('')
+
   const handleLogin = useCallback(
     async (event) => {
       event.preventDefault()
@@ -20,7 +24,7 @@ const Login = ({ history }) => {
         await app.auth().signInWithEmailAndPassword(email.value, password.value)
         history.push('/')
       } catch (error) {
-        alert(error)
+        setErr('Ошибка входа в систему')
       }
     },
     [history]
@@ -36,9 +40,9 @@ const Login = ({ history }) => {
     <Container component='main' maxWidth='xs'>
       <CssBaseline />
       <div>
-        <Typography component='h1' variant='h5'>
-          ВХОД
-        </Typography>
+        <Paper style={{ textAlign: 'center', marginTop: '15em' }}>
+          <img src={logo} alt='logo' />
+        </Paper>
         <form onSubmit={handleLogin}>
           <TextField
             variant='outlined'
@@ -46,7 +50,7 @@ const Login = ({ history }) => {
             required
             fullWidth
             id='email'
-            label='Email Address'
+            label='Email'
             name='email'
             autoComplete='email'
             autoFocus
@@ -57,18 +61,21 @@ const Login = ({ history }) => {
             required
             fullWidth
             name='password'
-            label='Password'
+            label='Пароль'
             type='password'
             id='password'
             autoComplete='current-password'
           />
           <FormControlLabel
             control={<Checkbox value='remember' color='primary' />}
-            label='Remember me'
+            label='Запомнить'
           />
-          <Button type='submit' fullWidth variant='contained' color='primary'>
-            Login
+          <Button type='submit' fullWidth variant='outlined' color='primary'>
+            Войти
           </Button>
+          <Typography variant='subtitle1' color='secondary'>
+            {err}
+          </Typography>
         </form>
       </div>
     </Container>
