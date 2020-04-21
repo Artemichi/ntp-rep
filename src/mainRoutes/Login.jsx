@@ -3,7 +3,6 @@ import { withRouter, Redirect } from 'react-router'
 import app from '../database/firebase'
 import { AuthContext } from '../database/Auth'
 import logo from '../assets/logo.png'
-
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
@@ -66,10 +65,7 @@ const Login = ({ history }) => {
             id='password'
             autoComplete='current-password'
           />
-          <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
-            label='Запомнить'
-          />
+          <FormControlLabel control={<Checkbox value='remember' color='primary' />} label='Запомнить' />
           <Button type='submit' fullWidth variant='outlined' color='primary'>
             Войти
           </Button>

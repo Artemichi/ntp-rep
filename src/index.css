@@ -6,6 +6,11 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   background-color: #fafafa;

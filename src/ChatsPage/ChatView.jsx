@@ -18,20 +18,9 @@ const ChatView = ({ chat, user }) => {
         <div className={s.content} id='chatViewBox'>
           {chat.messages.map((msg, i) => {
             return (
-              <Paper
-                key={i}
-                className={`${s.message} ${
-                  msg.sender === user ? s.userSent : s.friendSent
-                }`}
-                square
-              >
+              <Paper key={i} className={`${s.message} ${msg.sender === user ? s.userSent : s.friendSent}`} square>
                 {msg.message}
-                <Typography
-                  className={s.timestamp}
-                  component='div'
-                  color='textSecondary'
-                  variant='caption'
-                >
+                <Typography component='div' color='textSecondary' variant='caption'>
                   {new Date(msg.timestamp).toLocaleDateString()}
                 </Typography>
               </Paper>

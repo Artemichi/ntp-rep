@@ -12,7 +12,6 @@ const Chats = () => {
   const currentUser = useContext(AuthContext)
   const { uid } = currentUser
   const [selectedChat, setSelectedChat] = useState(null)
-  const [newChatVisible, setNewChatVisible] = useState(false)
   const [chats, setChats] = useState([])
 
   useEffect(() => {
@@ -29,10 +28,13 @@ const Chats = () => {
     getChats()
   }, [uid])
 
+  useEffect(() => {
+    messageRead()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedChat])
+
   const submitMessage = (msg) => {
-    const docKey = buildDocKey(
-      chats[selectedChat].users.filter((usr) => usr !== uid)[0]
-    )
+    const docKey = buildDocKey(chats[selectedChat].users.filter((usr) => usr !== uid)[0])
     app
       .firestore()
       .collection('chats')
@@ -49,10 +51,18 @@ const Chats = () => {
 
   const buildDocKey = (friendUID) => [uid, friendUID].sort().join(':')
 
-  const openNewChat = () => {
-    setNewChatVisible((prev) => !prev)
-    setSelectedChat(null)
+  const messageRead = () => {
+    if (selectedChat !== null && selectedChat !== undefined) {
+      const docKey = buildDocKey(chats[selectedChat].users.filter((_usr) => _usr !== uid)[0])
+      if (notSenderClicked(selectedChat)) {
+        app.firestore().collection('chats').doc(docKey).update({
+          receiverHasRead: true,
+        })
+      }
+    }
   }
+
+  const notSenderClicked = (chatidx) => chats[chatidx].messages[chats[chatidx].messages.length - 1].sender !== uid
 
   return (
     <Container
@@ -62,22 +72,12 @@ const Chats = () => {
         justifyContent: 'space-between',
       }}
     >
-      <ChatsList
-        openNewChat={openNewChat}
-        selectChat={setSelectedChat}
-        chats={chats}
-        userID={uid}
-        selectedChatIdx={selectedChat}
-      />
+      <ChatsList selectChat={setSelectedChat} chats={chats} userID={uid} selectedChatIdx={selectedChat} />
       <Divider orientation='vertical' flexItem />
-      {newChatVisible ? null : (
-        <div style={{ flex: 2, flexDirection: 'column' }}>
-          <ChatView user={uid} chat={chats[selectedChat]} />
-          {selectedChat !== null && !newChatVisible ? (
-            <ChatTextBox submit={submitMessage} />
-          ) : null}
-        </div>
-      )}
+      <div style={{ flex: 2, flexDirection: 'column' }}>
+        <ChatView user={uid} chat={chats[selectedChat]} />
+        {selectedChat !== null ? <ChatTextBox submit={submitMessage} msgRead={messageRead} /> : null}
+      </div>
     </Container>
   )
 }
