@@ -7,9 +7,10 @@ import FolderIcon from '@material-ui/icons/Folder'
 import AccountCircleSharpIcon from '@material-ui/icons/AccountCircleSharp'
 import ChatBubbleSharpIcon from '@material-ui/icons/ChatBubbleSharp'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
+import AppsIcon from '@material-ui/icons/Apps'
 
 const Nav = () => {
-  const [value, setValue] = React.useState('account')
+  const [value, setValue] = React.useState('home')
   const history = useHistory()
 
   const handleChange = (event, newValue) => {
@@ -34,6 +35,13 @@ const Nav = () => {
         value='messages'
         icon={<ChatBubbleSharpIcon />}
         onClick={() => history.push('/chats')}
+      />
+
+      <BottomNavigationAction
+        label='Главная'
+        value='home'
+        icon={<AppsIcon />}
+        onClick={() => history.push('/')}
       />
       <BottomNavigationAction
         label='Nearby'

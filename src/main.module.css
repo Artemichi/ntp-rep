@@ -24,22 +24,46 @@
 /* CHATS */
 
 .content {
-  height: 100vh;
+  height: calc(100vh - 150px);
   overflow: auto;
-  padding: 25px;
-  overflow-y: scroll;
-  width: 50em;
+  padding: 2em;
+  overflow-y: auto;
 }
-
-.userSent {
-  float: left;
+.content::-webkit-scrollbar-thumb {
+  background-color: #fafafa;
+}
+.content:hover::-webkit-scrollbar-thumb {
+  background-color: #3f51b5;
+}
+.message {
+  margin-bottom: 1em;
+  font-size: 1rem;
+  max-width: 70%;
   clear: both;
-  padding: 1em;
+  padding: 8px 16px;
   word-wrap: break-word;
+}
+.userSent {
+  float: right;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+  border-bottom-left-radius: 1em;
+  text-align: right;
+  box-shadow: 2px 2px 4px -2px #3f51b5 !important;
 }
 .friendSent {
-  float: right;
-  clear: both;
-  padding: 1em;
-  word-wrap: break-word;
+  float: left;
+  border-top-right-radius: 1em;
+  border-bottom-right-radius: 1em;
+  border-bottom-left-radius: 1em;
+  text-align: left;
+  box-shadow: -2px -2px 4px -2px #3f51b5 !important;
+}
+
+.timestamp {
+  display: none;
+}
+
+.message:hover .timestamp {
+  display: block;
 }

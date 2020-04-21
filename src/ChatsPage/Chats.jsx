@@ -1,31 +1,53 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { AuthContext } from '../database/Auth'
+import firebase from 'firebase/app'
 import app from '../database/firebase'
 import ChatsList from './ChatsList'
 import ChatView from './ChatView'
-
+import ChatTextBox from './ChatTextBox'
 import Container from '@material-ui/core/Container'
+import Divider from '@material-ui/core/Divider'
 
-const Chats = ({ history }) => {
+const Chats = () => {
   const currentUser = useContext(AuthContext)
-
+  const { uid } = currentUser
   const [selectedChat, setSelectedChat] = useState(null)
   const [newChatVisible, setNewChatVisible] = useState(false)
   const [chats, setChats] = useState([])
 
   useEffect(() => {
     const getChats = async () => {
-      await app
+      app
         .firestore()
         .collection('chats')
-        .where('users', 'array-contains', currentUser.email)
+        .where('users', 'array-contains', uid)
         .onSnapshot(async (res) => {
           const update = res.docs.map((doc) => doc.data())
-          await setChats(update)
+          setChats(update)
         })
     }
     getChats()
-  }, [currentUser.email])
+  }, [uid])
+
+  const submitMessage = (msg) => {
+    const docKey = buildDocKey(
+      chats[selectedChat].users.filter((usr) => usr !== uid)[0]
+    )
+    app
+      .firestore()
+      .collection('chats')
+      .doc(docKey)
+      .update({
+        messages: firebase.firestore.FieldValue.arrayUnion({
+          sender: uid,
+          message: msg,
+          timestamp: Date.now(),
+        }),
+        receiverHasRead: false,
+      })
+  }
+
+  const buildDocKey = (friendUID) => [uid, friendUID].sort().join(':')
 
   const openNewChat = () => {
     setNewChatVisible((prev) => !prev)
@@ -37,19 +59,24 @@ const Chats = ({ history }) => {
       maxWidth='lg'
       style={{
         display: 'flex',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
       }}
     >
       <ChatsList
-        history={history}
         openNewChat={openNewChat}
         selectChat={setSelectedChat}
         chats={chats}
-        userEmail={currentUser.email}
+        userID={uid}
         selectedChatIdx={selectedChat}
       />
+      <Divider orientation='vertical' flexItem />
       {newChatVisible ? null : (
-        <ChatView user={currentUser.email} chat={chats[selectedChat]} />
+        <div style={{ flex: 2, flexDirection: 'column' }}>
+          <ChatView user={uid} chat={chats[selectedChat]} />
+          {selectedChat !== null && !newChatVisible ? (
+            <ChatTextBox submit={submitMessage} />
+          ) : null}
+        </div>
       )}
     </Container>
   )

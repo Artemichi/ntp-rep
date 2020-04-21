@@ -13,14 +13,14 @@ const User = () => {
       await app
         .firestore()
         .collection('users')
-        .doc(currentUser.email)
+        .doc(currentUser.uid)
         .get()
         .then((snapshot) => {
           setUserData(snapshot.data())
         })
     }
     fetchUser()
-  }, [currentUser.email])
+  }, [currentUser.uid])
 
   return (
     <Container maxWidth='lg'>

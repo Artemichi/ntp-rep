@@ -1,8 +1,8 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Nav from './Nav'
-import User from '../AccountPage/User'
-import Chats from '../ChatsPage/Chats'
+import User from '../accountPage/User'
+import Chats from '../chatsPage/Chats'
 
 const Home = () => {
   return (
