@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 import IconButton from '@material-ui/core/IconButton'
-import SendSharpIcon from '@material-ui/icons/SendSharp'
+import TelegramIcon from '@material-ui/icons/Telegram'
 
 const ChatTextBox = ({ submit, msgRead }) => {
   const [txt, setTxt] = useState('')
@@ -23,14 +23,13 @@ const ChatTextBox = ({ submit, msgRead }) => {
         }}
         onChange={(e) => setTxt(e.target.value)}
         value={txt}
-        id='textBox'
         onFocus={() => msgRead()}
         fullWidth
         variant='outlined'
         inputProps={{ autoComplete: 'off' }}
       />
       <IconButton aria-label='Отправить' color='primary' onClick={submitMessage}>
-        <SendSharpIcon />
+        <TelegramIcon fontSize='large' />
       </IconButton>
     </div>
   )

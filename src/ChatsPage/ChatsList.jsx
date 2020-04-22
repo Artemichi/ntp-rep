@@ -111,7 +111,7 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
         aria-controls='menu'
         aria-haspopup='true'
       >
-        Пользователи
+        пользователи
       </Button>
       <Menu
         id='menu'
@@ -134,10 +134,18 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
           />
         </ListItem>
         {[...users.keys()].map((key, idx) =>
-          key !== userID && !!getFriendName(key).match(new RegExp(searchInput, 'gi')) ? (
-            <ListItem onClick={() => pickNewChat(key)} key={idx}>
+          key !== userID && !!getFriendName(key).match(new RegExp(searchInput.trim(), 'gi')) ? (
+            <ListItem
+              onClick={() => {
+                setSearchInput('')
+                pickNewChat(key)
+              }}
+              key={idx}
+            >
               <ListItemAvatar>
-                <Avatar alt='userAvatar' src={getFriendPhoto(key)} />
+                <Avatar alt='chatImg' src={getFriendPhoto(key) === '' ? null : getFriendPhoto(key)}>
+                  {getFriendPhoto(key) === '' ? getFriendName(key).split('')[0] : null}
+                </Avatar>
               </ListItemAvatar>
               <ListItemText primary={getFriendName(key)} secondary={getFriendStatus(key)}></ListItemText>
             </ListItem>
@@ -155,7 +163,9 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
                   <div key={i} style={{ cursor: 'pointer' }}>
                     <ListItem onClick={() => selectChat(i)} selected={selectedChatIdx === i} alignItems='flex-start'>
                       <ListItemAvatar>
-                        <Avatar alt='chatImg' src={getFriendPhoto(friendUID)} />
+                        <Avatar alt='chatImg' src={getFriendPhoto(friendUID) === '' ? null : getFriendPhoto(friendUID)}>
+                          {getFriendPhoto(friendUID) === '' ? getFriendName(friendUID).split('')[0] : null}
+                        </Avatar>
                       </ListItemAvatar>
                       <ListItemText
                         primary={getFriendName(friendUID)}
