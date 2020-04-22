@@ -15,17 +15,21 @@ const Chats = () => {
   const [chats, setChats] = useState([])
 
   useEffect(() => {
+    let mounted = true
     const getChats = async () => {
       app
         .firestore()
         .collection('chats')
         .where('users', 'array-contains', uid)
         .onSnapshot(async (res) => {
-          const update = res.docs.map((doc) => doc.data())
-          setChats(update)
+          if (mounted) {
+            const update = res.docs.map((doc) => doc.data())
+            setChats(update)
+          }
         })
     }
     getChats()
+    return () => (mounted = false)
   }, [uid])
 
   useEffect(() => {

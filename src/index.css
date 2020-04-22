@@ -27,7 +27,7 @@ body {
 
 .MuiListItem-root.Mui-selected {
   background-color: #ffffff !important;
-  box-shadow: -3px -3px 9px -3px #3f51b5 !important;
+  box-shadow: inset -2px 0 0 0 #3f51b5 !important;
 }
 
 .MuiBottomNavigation-root {
@@ -36,4 +36,13 @@ body {
 
 .MuiIconButton-root {
   padding: 11px !important;
+}
+
+.MuiContainer-root {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.MuiSelect-icon {
+  display: none !important;
 }

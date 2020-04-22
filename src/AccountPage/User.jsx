@@ -9,17 +9,20 @@ const User = () => {
   const [userData, setUserData] = useState({})
 
   useEffect(() => {
+    let mounted = true
     const fetchUser = async () => {
-      await app
+      app
         .firestore()
         .collection('users')
         .doc(currentUser.uid)
-        .get()
-        .then((snapshot) => {
-          setUserData(snapshot.data())
+        .onSnapshot(async (snapshot) => {
+          if (mounted) {
+            setUserData(snapshot.data())
+          }
         })
     }
     fetchUser()
+    return () => (mounted = false)
   }, [currentUser.uid])
 
   return (

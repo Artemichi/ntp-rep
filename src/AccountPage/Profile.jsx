@@ -1,36 +1,121 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import app from '../database/firebase'
 import s from '../main.module.css'
+import { AuthContext } from '../database/Auth'
 import Avatar from '@material-ui/core/Avatar'
 import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-import Badge from '@material-ui/core/Badge'
 import Typography from '@material-ui/core/Typography'
+import FormControl from '@material-ui/core/FormControl'
+import Select from '@material-ui/core/Select'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@material-ui/core/Button'
+import CloudUploadIcon from '@material-ui/icons/CloudUpload'
+import Badge from '@material-ui/core/Badge'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 
 const Profile = ({ user }) => {
+  const [status, setStatus] = useState('')
+  const [open, setOpen] = useState(false)
+  const [uploadComplete, setUploadComplete] = useState(false)
+  const currentUser = useContext(AuthContext)
+
+  useEffect(() => {
+    setStatus(user.status)
+  }, [user])
+
+  useEffect(() => {
+    if (status && status !== '') {
+      app.firestore().collection('users').doc(currentUser.uid).update({
+        status: status,
+      })
+    }
+  }, [status, currentUser.uid])
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const delay = (ms) => new Promise((r) => setTimeout(() => r(), ms))
+
+  const uploadUserPhoto = async (e) => {
+    const file = e.target.files[0]
+    const imgRef = app.storage().ref(`usersPhotos/${file.name}`)
+    await imgRef.put(file).then(() => {
+      setUploadComplete(true)
+    })
+    await imgRef.getDownloadURL().then((url) => {
+      app.firestore().collection('users').doc(currentUser.uid).update({
+        photo: url,
+      })
+    })
+    await delay(4000).then(() => setUploadComplete(false))
+  }
+
   return (
     <Paper className={s.profilePaper}>
-      <div className={s.profileContainer}>
-        <Avatar className={s.avatarImg} src={user.photo} alt='profilePhoto' />
-
-        <Badge color='secondary' variant='dot'>
-          <Typography variant='h5' component='h2'>
-            {user.name} {user.surname}
-          </Typography>
-        </Badge>
+      <div style={{ alignSelf: 'flex-end', marginBottom: '2em' }}>
+        <IconButton className={s.logout} aria-label='logout' color='primary' onClick={() => app.auth().signOut()}>
+          <ExitToAppIcon />
+        </IconButton>
       </div>
 
-      <div>Текущий статус: {user.status}</div>
+      <div className={s.profileContainer}>
+        <Badge
+          badgeContent={
+            <>
+              <input
+                accept='image/*'
+                id='icon-button-file'
+                type='file'
+                style={{ display: 'none' }}
+                onChange={(e) => uploadUserPhoto(e)}
+              />
+              <label htmlFor='icon-button-file'>
+                <IconButton color='primary' aria-label='upload picture' component='span'>
+                  {uploadComplete ? <CheckCircleIcon /> : <CloudUploadIcon />}
+                </IconButton>
+              </label>
+            </>
+          }
+        >
+          <Avatar className={s.avatarImg} src={user.photo} alt='profilePhoto' />
+        </Badge>
 
-      <IconButton
-        className={s.logout}
-        aria-label='delete'
-        color='secondary'
-        onClick={() => app.auth().signOut()}
-      >
-        <ExitToAppIcon />
-      </IconButton>
+        <Typography variant='h5' component='h2'>
+          {user.name} {user.surname}
+        </Typography>
+      </div>
+
+      <div className={s.statusBar}>
+        <FormControl className={s.statusInput}>
+          <InputLabel id='controlled-open-select-label'>Текущий статус</InputLabel>
+          <Select
+            labelId='controlled-open-select-label'
+            id='controlled-open-select'
+            open={open}
+            onClose={handleClose}
+            onOpen={handleOpen}
+            value={status || ''}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            <MenuItem value={'Онлайн'}>Онлайн</MenuItem>
+            <MenuItem value={'Не в сети'}>Не в сети</MenuItem>
+            <MenuItem value={'Нет на месте'}>Нет на месте</MenuItem>
+          </Select>
+        </FormControl>
+        <div className={s.statusBtn}>
+          <Button onClick={handleOpen} color='primary' variant='outlined'>
+            Изменить статус
+          </Button>
+        </div>
+      </div>
     </Paper>
   )
 }

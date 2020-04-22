@@ -23,11 +23,10 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
 
   useEffect(() => {
     const getUsers = async () => {
-      await app
+      app
         .firestore()
         .collection('users')
-        .get()
-        .then((snapshot) => {
+        .onSnapshot((snapshot) => {
           snapshot.forEach(async (doc) => {
             users.set(doc.id, doc.data())
           })
