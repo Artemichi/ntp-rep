@@ -79,7 +79,7 @@ const Chats = () => {
       <ChatsList selectChat={setSelectedChat} chats={chats} userID={uid} selectedChatIdx={selectedChat} />
       <Divider orientation='vertical' flexItem />
       <div style={{ flex: 2, flexDirection: 'column' }}>
-        <ChatView user={uid} chat={chats[selectedChat]} />
+        <ChatView user={uid} chat={chats[selectedChat]} selectChat={setSelectedChat} idx={selectedChat} />
         {selectedChat !== null ? <ChatTextBox submit={submitMessage} msgRead={messageRead} /> : null}
       </div>
     </Container>

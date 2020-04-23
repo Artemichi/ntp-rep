@@ -101,97 +101,108 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
   const userIsSender = (chat) => chat.messages[chat.messages.length - 1].sender === userID
 
   return (
-    <div style={{ flex: 1 }}>
-      <Button
-        variant='text'
-        fullWidth
-        color='primary'
-        onClick={(e) => onMenuOpen(e)}
-        aria-controls='menu'
-        aria-haspopup='true'
-      >
-        пользователи
-      </Button>
-      <Menu
-        id='menu'
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={onMenuClose}
-        getContentAnchorEl={null}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-        disableAutoFocusItem
-      >
-        <ListItem>
-          <TextField
-            label='Поиск'
+    <>
+      {selectedChatIdx !== null && window.innerWidth < 767 ? null : (
+        <div style={window.innerWidth < 767 ? { width: '100%' } : { flex: 1 }}>
+          <Button
+            variant='text'
             fullWidth
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            autoFocus
-          />
-        </ListItem>
-        {[...users.keys()].map((key, idx) =>
-          key !== userID && !!getFriendName(key).match(new RegExp(searchInput.trim(), 'gi')) ? (
-            <ListItem
-              onClick={() => {
-                setSearchInput('')
-                pickNewChat(key)
-              }}
-              key={idx}
-            >
-              <ListItemAvatar>
-                <Avatar alt='chatImg' src={getFriendPhoto(key) === '' ? null : getFriendPhoto(key)}>
-                  {getFriendPhoto(key) === '' ? getFriendName(key).split('')[0] : null}
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={getFriendName(key)} secondary={getFriendStatus(key)}></ListItemText>
+            color='primary'
+            onClick={(e) => onMenuOpen(e)}
+            aria-controls='menu'
+            aria-haspopup='true'
+          >
+            пользователи
+          </Button>
+          <Menu
+            id='menu'
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={onMenuClose}
+            getContentAnchorEl={null}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+            disableAutoFocusItem
+          >
+            <ListItem>
+              <TextField
+                label='Поиск'
+                fullWidth
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                autoFocus
+              />
             </ListItem>
-          ) : null
-        )}
-      </Menu>
-      {loading ? (
-        <LinearProgress />
-      ) : (
-        <List>
-          {chats
-            ? chats.map((chat, i) => {
-                let friendUID = chat.users.filter((user) => user !== userID)[0]
-                return (
-                  <div key={i} style={{ cursor: 'pointer' }}>
-                    <ListItem onClick={() => selectChat(i)} selected={selectedChatIdx === i} alignItems='flex-start'>
-                      <ListItemAvatar>
-                        <Avatar alt='chatImg' src={getFriendPhoto(friendUID) === '' ? null : getFriendPhoto(friendUID)}>
-                          {getFriendPhoto(friendUID) === '' ? getFriendName(friendUID).split('')[0] : null}
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={getFriendName(friendUID)}
-                        secondary={
-                          <React.Fragment>
-                            <Typography component='span' color='textSecondary' variant='caption'>
-                              {chat.messages[chat.messages.length - 1].sender === userID
-                                ? `Вы: ${chat.messages[chat.messages.length - 1].message.substring(0, 20)}`
-                                : chat.messages[chat.messages.length - 1].message.substring(0, 20)}
-                            </Typography>
-                          </React.Fragment>
-                        }
-                      ></ListItemText>
-                      {chat.receiverHasRead === false && !userIsSender(chat) ? (
-                        <ListItemIcon>
-                          <MailOutlineRoundedIcon color='primary' />
-                        </ListItemIcon>
-                      ) : null}
-                    </ListItem>
-                    <Divider />
-                  </div>
-                )
-              })
-            : null}
-        </List>
+            {[...users.keys()].map((key, idx) =>
+              key !== userID && !!getFriendName(key).match(new RegExp(searchInput.trim(), 'gi')) ? (
+                <ListItem
+                  onClick={() => {
+                    setSearchInput('')
+                    pickNewChat(key)
+                  }}
+                  key={idx}
+                >
+                  <ListItemAvatar>
+                    <Avatar alt='chatImg' src={getFriendPhoto(key) === '' ? null : getFriendPhoto(key)}>
+                      {getFriendPhoto(key) === '' ? getFriendName(key).split('')[0] : null}
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary={getFriendName(key)} secondary={getFriendStatus(key)}></ListItemText>
+                </ListItem>
+              ) : null
+            )}
+          </Menu>
+          {loading ? (
+            <LinearProgress />
+          ) : (
+            <List>
+              {chats
+                ? chats.map((chat, i) => {
+                    let friendUID = chat.users.filter((user) => user !== userID)[0]
+                    return (
+                      <div key={i} style={{ cursor: 'pointer' }}>
+                        <ListItem
+                          onClick={() => selectChat(i)}
+                          selected={selectedChatIdx === i}
+                          alignItems='flex-start'
+                        >
+                          <ListItemAvatar>
+                            <Avatar
+                              alt='chatImg'
+                              src={getFriendPhoto(friendUID) === '' ? null : getFriendPhoto(friendUID)}
+                            >
+                              {getFriendPhoto(friendUID) === '' ? getFriendName(friendUID).split('')[0] : null}
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={getFriendName(friendUID)}
+                            secondary={
+                              <React.Fragment>
+                                <Typography component='span' color='textSecondary' variant='caption'>
+                                  {chat.messages[chat.messages.length - 1].sender === userID
+                                    ? `Вы: ${chat.messages[chat.messages.length - 1].message.substring(0, 20)}`
+                                    : chat.messages[chat.messages.length - 1].message.substring(0, 20)}
+                                </Typography>
+                              </React.Fragment>
+                            }
+                          ></ListItemText>
+                          {chat.receiverHasRead === false && !userIsSender(chat) ? (
+                            <ListItemIcon>
+                              <MailOutlineRoundedIcon color='primary' />
+                            </ListItemIcon>
+                          ) : null}
+                        </ListItem>
+                        <Divider />
+                      </div>
+                    )
+                  })
+                : null}
+            </List>
+          )}
+        </div>
       )}
-    </div>
+    </>
   )
 }
 
