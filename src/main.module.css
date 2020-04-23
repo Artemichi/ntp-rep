@@ -101,7 +101,7 @@
 
 @media screen and (max-width: 767px) {
   .content {
-    height: calc(100vh - 190px);
+    height: 80vh;
     padding: 1em;
   }
 }

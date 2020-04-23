@@ -15,7 +15,7 @@ const ChatView = ({ chat, user, selectChat, idx }) => {
   }, [chat])
 
   return (
-    <div style={{ marginBottom: '1em' }}>
+    <div>
       {idx !== null && window.innerWidth < 767 ? (
         <div>
           <IconButton aria-label='back' color='primary' size='small' onClick={() => selectChat(null)}>
