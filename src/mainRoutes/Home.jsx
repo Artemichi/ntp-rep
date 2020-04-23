@@ -1,9 +1,9 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Nav from './Nav'
-import User from './User'
-import Chats from '../chatsPage/Chats'
-import UserQRcode from '../qrCodePage/QRcode'
+import User from '../account/User'
+import Chats from '../chats/Chats'
+import UserQRcode from '../qrcode/QRcode'
 
 const Home = () => {
   return (
