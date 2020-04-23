@@ -88,7 +88,21 @@ const Profile = ({ user }) => {
           <Avatar className={s.avatarImg} src={user.photo} alt='profilePhoto' />
         </Badge>
 
-        <Typography variant='h5' component='h2'>
+        <Typography
+          variant='h5'
+          component='h2'
+          className={
+            status !== ''
+              ? status === 'Онлайн'
+                ? s.statusLineOnline
+                : status === 'Не в сети'
+                ? s.statusLineOffline
+                : status === 'Нет на месте'
+                ? s.statusLineAway
+                : null
+              : null
+          }
+        >
           {user.name} {user.surname}
         </Typography>
       </div>

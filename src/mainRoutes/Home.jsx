@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Nav from './Nav'
 import User from '../accountPage/User'
 import Chats from '../chatsPage/Chats'
+import UserQRcode from '../qrCodePage/QRcode'
 
 const Home = () => {
   return (
@@ -12,6 +13,7 @@ const Home = () => {
         <Switch>
           <Route exact path='/user' component={User} />
           <Route exact path='/chats' component={Chats} />
+          <Route exact path='/code' component={UserQRcode} />
         </Switch>
       </Router>
     </React.Fragment>

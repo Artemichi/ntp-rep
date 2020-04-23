@@ -3,10 +3,10 @@ import s from '../main.module.css'
 import { useHistory } from 'react-router-dom'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
-import FolderIcon from '@material-ui/icons/Folder'
 import AccountCircleSharpIcon from '@material-ui/icons/AccountCircleSharp'
 import ChatBubbleSharpIcon from '@material-ui/icons/ChatBubbleSharp'
 import AppsIcon from '@material-ui/icons/Apps'
+import CropFreeIcon from '@material-ui/icons/CropFree'
 
 const Nav = () => {
   const [value, setValue] = React.useState('home')
@@ -33,7 +33,12 @@ const Nav = () => {
       />
 
       <BottomNavigationAction label='Главная' value='home' icon={<AppsIcon />} onClick={() => history.push('/')} />
-      <BottomNavigationAction label='Folder' value='folder' icon={<FolderIcon />} />
+      <BottomNavigationAction
+        label='QR-код'
+        value='code'
+        icon={<CropFreeIcon />}
+        onClick={() => history.push('/code')}
+      />
     </BottomNavigation>
   )
 }

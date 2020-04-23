@@ -10,8 +10,8 @@ import TextField from '@material-ui/core/TextField'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
+import Alert from '@material-ui/lab/Alert'
 
 const Login = ({ history }) => {
   const [err, setErr] = useState('')
@@ -24,7 +24,7 @@ const Login = ({ history }) => {
         await app.auth().signInWithEmailAndPassword(email.value, password.value)
         history.push('/')
       } catch (error) {
-        setErr('Ошибка входа в систему')
+        setErr('Ошибка авторизации. Неверный Email или Пароль')
       }
     },
     [history]
@@ -84,9 +84,11 @@ const Login = ({ history }) => {
             <Button type='submit' variant='outlined' color='primary' fullWidth>
               Войти
             </Button>
-            <Typography variant='subtitle1' color='secondary'>
-              {err}
-            </Typography>
+            {err !== '' ? (
+              <Alert severity='error' style={{ marginTop: '1em' }}>
+                {err}
+              </Alert>
+            ) : null}
           </form>
         </div>
       </Grid>
