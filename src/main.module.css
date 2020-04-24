@@ -3,6 +3,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
+  z-index: 1000;
 }
 
 /* LOGIN */
@@ -68,7 +69,6 @@
 /* CHATS */
 
 .content {
-  height: calc(100vh - 150px);
   overflow: auto;
   padding: 2em;
   overflow-y: auto;
@@ -100,8 +100,10 @@
 }
 
 @media screen and (max-width: 767px) {
+  body {
+    margin: 0 0 56px 0;
+  }
   .content {
     padding: 1em;
-    height: calc(100vh - 220px);
   }
 }

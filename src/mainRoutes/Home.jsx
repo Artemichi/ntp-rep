@@ -4,6 +4,7 @@ import Nav from './Nav'
 import User from '../account/User'
 import Chats from '../chats/Chats'
 import UserQRcode from '../qrcode/QRcode'
+import Dashboard from '../startscreen/Dashboard'
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <Router>
         <Nav />
         <Switch>
+          <Route exact path='/' component={Dashboard} />
           <Route exact path='/user' component={User} />
           <Route exact path='/chats' component={Chats} />
           <Route exact path='/code' component={UserQRcode} />

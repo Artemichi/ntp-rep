@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import app from '../database/firebase'
+import {debounce} from './debounce'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -20,6 +21,7 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
   const [loading, setLoading] = useState(true)
   const [anchorEl, setAnchorEl] = useState(null)
   const [searchInput, setSearchInput] = useState('')
+  const [chatListWidth, setChatListWidth] = useState(window.innerWidth)
 
   useEffect(() => {
     const getUsers = async () => {
@@ -35,6 +37,14 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
     }
     getUsers()
   }, [users])
+
+  useEffect(() => {
+    const debounceChatListResize = debounce(() => {
+      setChatListWidth(window.innerWidth)
+    }, 500)
+    window.addEventListener('resize', debounceChatListResize)
+    return _ => window.removeEventListener('resize', debounceChatListResize)
+  })
 
   const onMenuClose = () => {
     setAnchorEl(null)
@@ -102,8 +112,8 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
 
   return (
     <>
-      {selectedChatIdx !== null && window.innerWidth < 767 ? null : (
-        <div style={window.innerWidth < 767 ? { width: '100%' } : { flex: 1 }}>
+      {selectedChatIdx !== null && chatListWidth < 767 ? null : (
+        <div style={chatListWidth < 767 ? { width: '100%' } : { flex: 1 }}>
           <Button
             variant='text'
             fullWidth
