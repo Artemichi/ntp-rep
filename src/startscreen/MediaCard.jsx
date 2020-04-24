@@ -20,7 +20,7 @@ export default function MediaCard({ card }) {
         title={card.type}
         subheader={new Date(card.date.toDate()).toLocaleDateString()}
       />
-      <CardMedia style={{ height: 200 }} image={card.photo} />
+      {card.photo ? <CardMedia style={{ height: 200 }} image={card.photo} /> : null}
       <CardContent>
         <Typography gutterBottom variant='h5' component='h2'>
           {card.title}

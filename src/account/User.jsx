@@ -3,6 +3,8 @@ import { AuthContext } from '../database/Auth'
 import app from '../database/firebase'
 import Profile from './Profile'
 import Container from '@material-ui/core/Container'
+import Chart from './Chart'
+import Paper from '@material-ui/core/Paper'
 
 const User = () => {
   const currentUser = useContext(AuthContext)
@@ -28,6 +30,9 @@ const User = () => {
   return (
     <Container maxWidth='lg'>
       <Profile user={userData} />
+      <Paper style={{ height: 300, marginTop: '2em' }}>
+        <Chart />
+      </Paper>
     </Container>
   )
 }

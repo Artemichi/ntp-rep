@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import {debounce} from './debounce'
+import { debounce } from '../debounce'
 import s from '../main.module.css'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
@@ -24,14 +24,14 @@ const ChatView = ({ chat, user, selectChat, idx }) => {
       setChatHeight(window.innerHeight)
     }, 500)
     window.addEventListener('resize', debounceResizeEvent)
-    return _ => window.removeEventListener('resize', debounceResizeEvent)
+    return (_) => window.removeEventListener('resize', debounceResizeEvent)
   })
 
   return (
     <div style={{ height: chatHeight - 112 }}>
       {idx !== null && chatWidth < 767 ? (
         <div onClick={() => selectChat(null)}>
-          <IconButton aria-label='back' color='primary' size='small' >
+          <IconButton aria-label='back' color='primary' size='small'>
             <ArrowBackIosIcon />
             Назад
           </IconButton>

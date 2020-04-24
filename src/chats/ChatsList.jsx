@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import app from '../database/firebase'
-import {debounce} from './debounce'
+import { debounce } from '../debounce'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -43,7 +43,7 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
       setChatListWidth(window.innerWidth)
     }, 500)
     window.addEventListener('resize', debounceChatListResize)
-    return _ => window.removeEventListener('resize', debounceChatListResize)
+    return (_) => window.removeEventListener('resize', debounceChatListResize)
   })
 
   const onMenuClose = () => {
@@ -122,7 +122,7 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
             aria-controls='menu'
             aria-haspopup='true'
           >
-            пользователи
+            поиск
           </Button>
           <Menu
             id='menu'

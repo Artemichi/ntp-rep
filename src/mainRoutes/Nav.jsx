@@ -25,19 +25,21 @@ const Nav = () => {
         onClick={() => history.push('/user')}
       />
 
+      <BottomNavigationAction label='Главная' value='home' icon={<DashboardIcon />} onClick={() => history.push('/')} />
       <BottomNavigationAction
         label='Сообщения'
         value='messages'
         icon={<ChatBubbleSharpIcon />}
         onClick={() => history.push('/chats')}
       />
-      <BottomNavigationAction label='Главная' value='home' icon={<DashboardIcon />} onClick={() => history.push('/')} />
-      <BottomNavigationAction
-        label='QR-код'
-        value='code'
-        icon={<CropFreeIcon />}
-        onClick={() => history.push('/code')}
-      />
+      {window.innerWidth < 767 ? (
+        <BottomNavigationAction
+          label='QR-код'
+          value='code'
+          icon={<CropFreeIcon />}
+          onClick={() => history.push('/code')}
+        />
+      ) : null}
     </BottomNavigation>
   )
 }
