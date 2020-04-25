@@ -5,6 +5,7 @@ import User from '../account/User'
 import Chats from '../chats/Chats'
 import UserQRcode from '../qrcode/QRcode'
 import Dashboard from '../startscreen/Dashboard'
+import Board from '../kanban/Board'
 
 const Home = () => {
   return (
@@ -15,6 +16,7 @@ const Home = () => {
           <Route exact path='/' component={Dashboard} />
           <Route exact path='/user' component={User} />
           <Route exact path='/chats' component={Chats} />
+          <Route exact path='/kanban' component={Board} />
           <Route exact path='/code' component={UserQRcode} />
         </Switch>
       </Router>

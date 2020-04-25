@@ -167,47 +167,47 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
             <LinearProgress />
           ) : (
             <List>
-              {chats
-                ? chats.map((chat, i) => {
-                    let friendUID = chat.users.filter((user) => user !== userID)[0]
-                    return (
-                      <div key={i} style={{ cursor: 'pointer' }}>
-                        <ListItem
-                          onClick={() => selectChat(i)}
-                          selected={selectedChatIdx === i}
-                          alignItems='flex-start'
-                        >
-                          <ListItemAvatar>
-                            <Avatar
-                              alt='chatImg'
-                              src={getFriendPhoto(friendUID) === '' ? null : getFriendPhoto(friendUID)}
-                            >
-                              {getFriendPhoto(friendUID) === '' ? getFriendName(friendUID).split('')[0] : null}
-                            </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText
-                            primary={getFriendName(friendUID)}
-                            secondary={
-                              <React.Fragment>
-                                <Typography component='span' color='textSecondary' variant='caption'>
-                                  {chat.messages[chat.messages.length - 1].sender === userID
-                                    ? `Вы: ${chat.messages[chat.messages.length - 1].message.substring(0, 20)}`
-                                    : chat.messages[chat.messages.length - 1].message.substring(0, 20)}
-                                </Typography>
-                              </React.Fragment>
-                            }
-                          ></ListItemText>
-                          {chat.receiverHasRead === false && !userIsSender(chat) ? (
-                            <ListItemIcon>
-                              <MailOutlineRoundedIcon color='primary' />
-                            </ListItemIcon>
-                          ) : null}
-                        </ListItem>
-                        <Divider />
-                      </div>
-                    )
-                  })
-                : null}
+              {chats.length !== 0 ? (
+                chats.map((chat, i) => {
+                  let friendUID = chat.users.filter((user) => user !== userID)[0]
+                  return (
+                    <div key={i} style={{ cursor: 'pointer' }}>
+                      <ListItem onClick={() => selectChat(i)} selected={selectedChatIdx === i} alignItems='flex-start'>
+                        <ListItemAvatar className={getFriendStatus(friendUID) === 'Онлайн' ? 'statusDot' : null}>
+                          <Avatar
+                            alt='chatImg'
+                            src={getFriendPhoto(friendUID) === '' ? null : getFriendPhoto(friendUID)}
+                          >
+                            {getFriendPhoto(friendUID) === '' ? getFriendName(friendUID).split('')[0] : null}
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={getFriendName(friendUID)}
+                          secondary={
+                            <React.Fragment>
+                              <Typography component='span' color='textSecondary' variant='caption'>
+                                {chat.messages[chat.messages.length - 1].sender === userID
+                                  ? `Вы: ${chat.messages[chat.messages.length - 1].message.substring(0, 20)}`
+                                  : chat.messages[chat.messages.length - 1].message.substring(0, 20)}
+                              </Typography>
+                            </React.Fragment>
+                          }
+                        ></ListItemText>
+                        {chat.receiverHasRead === false && !userIsSender(chat) ? (
+                          <ListItemIcon>
+                            <MailOutlineRoundedIcon color='primary' />
+                          </ListItemIcon>
+                        ) : null}
+                      </ListItem>
+                      <Divider />
+                    </div>
+                  )
+                })
+              ) : (
+                <ListItem>
+                  <ListItemText primary='Нет текущих чатов' secondary='Что бы начать новый чат выберите собеседника' />
+                </ListItem>
+              )}
             </List>
           )}
         </div>

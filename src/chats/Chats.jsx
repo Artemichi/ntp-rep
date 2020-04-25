@@ -56,7 +56,7 @@ const Chats = () => {
   const buildDocKey = (friendUID) => [uid, friendUID].sort().join(':')
 
   const messageRead = () => {
-    if (selectedChat !== null && selectedChat !== undefined) {
+    if (selectedChat !== null && selectedChat !== undefined && chats[selectedChat] && chats[selectedChat].users) {
       const docKey = buildDocKey(chats[selectedChat].users.filter((_usr) => _usr !== uid)[0])
       if (notSenderClicked(selectedChat)) {
         app.firestore().collection('chats').doc(docKey).update({

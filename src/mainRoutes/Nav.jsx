@@ -7,6 +7,7 @@ import AccountCircleSharpIcon from '@material-ui/icons/AccountCircleSharp'
 import ChatBubbleSharpIcon from '@material-ui/icons/ChatBubbleSharp'
 import CropFreeIcon from '@material-ui/icons/CropFree'
 import DashboardIcon from '@material-ui/icons/Dashboard'
+import AssignmentIcon from '@material-ui/icons/Assignment'
 
 const Nav = () => {
   const [value, setValue] = React.useState('home')
@@ -32,6 +33,15 @@ const Nav = () => {
         icon={<ChatBubbleSharpIcon />}
         onClick={() => history.push('/chats')}
       />
+      {window.innerWidth > 1000 ? (
+        <BottomNavigationAction
+          label='Задачи'
+          value='kanban'
+          icon={<AssignmentIcon />}
+          onClick={() => history.push('/kanban')}
+        />
+      ) : null}
+
       {window.innerWidth < 767 ? (
         <BottomNavigationAction
           label='QR-код'
