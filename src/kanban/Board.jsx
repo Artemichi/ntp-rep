@@ -1,33 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import app from '../database/firebase'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import { v4 as uuid } from 'uuid'
-
-const itemsFromBackend = [
-  { id: uuid(), content: 'First task' },
-  { id: uuid(), content: 'Second task' },
-  { id: uuid(), content: 'Third task' },
-  { id: uuid(), content: 'Fourth task' },
-  { id: uuid(), content: 'Fifth task' },
-]
-
-const columnsFromBackend = {
-  [uuid()]: {
-    name: 'Requested',
-    items: itemsFromBackend,
-  },
-  [uuid()]: {
-    name: 'To do',
-    items: [],
-  },
-  [uuid()]: {
-    name: 'In Progress',
-    items: [],
-  },
-  [uuid()]: {
-    name: 'Done',
-    items: [],
-  },
-}
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import SaveIcon from '@material-ui/icons/Save'
+import IconButton from '@material-ui/core/IconButton'
 
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return
@@ -67,72 +45,113 @@ const onDragEnd = (result, columns, setColumns) => {
 }
 
 const Board = () => {
-  const [columns, setColumns] = useState(columnsFromBackend)
+  const [columns, setColumns] = useState(null)
+  const [projectInfo, setProjectInfo] = useState(null)
+
+  useEffect(() => {
+    app
+      .firestore()
+      .collection('board')
+      .doc('bDxfJdavzco1ZyNhYQUL')
+      .get()
+      .then((snapshot) => {
+        setProjectInfo(snapshot.data().info)
+        setColumns(snapshot.data().columns)
+      })
+  }, [])
+
+  const sync = async () => {
+    app.firestore().collection('board').doc('bDxfJdavzco1ZyNhYQUL').update({
+      columns: columns,
+    })
+  }
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-      <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
-        {Object.entries(columns).map(([columnId, column], index) => {
-          return (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-              key={columnId}
-            >
-              <h2>{column.name}</h2>
-              <div style={{ margin: 8 }}>
-                <Droppable droppableId={columnId} key={columnId}>
-                  {(provided, snapshot) => {
-                    return (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        style={{
-                          background: snapshot.isDraggingOver ? 'lightblue' : 'lightgrey',
-                          padding: 4,
-                          width: 250,
-                          minHeight: 500,
-                        }}
-                      >
-                        {column.items.map((item, index) => {
+    <>
+      {columns !== null ? (
+        <>
+          <Typography variant='h3' gutterBottom align='center'>
+            {`${projectInfo.title} (${projectInfo.stage})`}
+          </Typography>
+          <div style={{ position: 'absolute', top: 0, right: 0 }}>
+            <IconButton aria-label='save' color='primary' onClick={() => sync()}>
+              <SaveIcon fontSize='large' />
+            </IconButton>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-evenly', height: '100%', marginTop: '4em' }}>
+            <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
+              {Object.entries(columns).map(([columnId, column], index) => {
+                return (
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                    }}
+                    key={columnId}
+                  >
+                    <Typography variant='h5' gutterBottom>
+                      {column.name}
+                    </Typography>
+                    <div style={{ margin: 8 }}>
+                      <Droppable droppableId={columnId} key={columnId}>
+                        {(provided, snapshot) => {
                           return (
-                            <Draggable key={item.id} draggableId={item.id} index={index}>
-                              {(provided, snapshot) => {
-                                return (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      userSelect: 'none',
-                                      padding: 16,
-                                      margin: '0 0 8px 0',
-                                      minHeight: '50px',
-                                      backgroundColor: snapshot.isDragging ? '#263B4A' : '#456C86',
-                                      color: 'white',
-                                      ...provided.draggableProps.style,
-                                    }}
-                                  >
-                                    {item.content}
-                                  </div>
-                                )
+                            <div
+                              {...provided.droppableProps}
+                              ref={provided.innerRef}
+                              style={{
+                                background: '#fafafa',
+                                padding: 20,
+                                width: 300,
+                                minHeight: 600,
+                                border: '1px solid #3f51b5',
+                                borderRadius: 8,
                               }}
-                            </Draggable>
+                            >
+                              {column.items.map((item, index) => {
+                                return (
+                                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                                    {(provided, snapshot) => {
+                                      return (
+                                        <Paper
+                                          ref={provided.innerRef}
+                                          {...provided.draggableProps}
+                                          {...provided.dragHandleProps}
+                                          style={{
+                                            userSelect: 'none',
+                                            padding: 10,
+                                            margin: '0 0 14px 0',
+                                            minHeight: '50px',
+                                            boxShadow: snapshot.isDragging
+                                              ? '0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)'
+                                              : '',
+                                            ...provided.draggableProps.style,
+                                          }}
+                                        >
+                                          {item.content}
+                                        </Paper>
+                                      )
+                                    }}
+                                  </Draggable>
+                                )
+                              })}
+                              {provided.placeholder}
+                            </div>
                           )
-                        })}
-                        {provided.placeholder}
-                      </div>
-                    )
-                  }}
-                </Droppable>
-              </div>
-            </div>
-          )
-        })}
-      </DragDropContext>
-    </div>
+                        }}
+                      </Droppable>
+                    </div>
+                  </div>
+                )
+              })}
+            </DragDropContext>
+          </div>
+        </>
+      ) : (
+        <LinearProgress />
+      )}
+    </>
   )
 }
 
