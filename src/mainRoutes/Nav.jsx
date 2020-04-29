@@ -9,7 +9,7 @@ import CropFreeIcon from '@material-ui/icons/CropFree'
 import DashboardIcon from '@material-ui/icons/Dashboard'
 import AssignmentIcon from '@material-ui/icons/Assignment'
 
-const Nav = () => {
+const Nav = ({ show }) => {
   const [value, setValue] = React.useState('home')
   const history = useHistory()
 
@@ -18,7 +18,12 @@ const Nav = () => {
   }
 
   return (
-    <BottomNavigation value={value} onChange={handleChange} className={s.bottomNavBar}>
+    <BottomNavigation
+      value={value}
+      onChange={handleChange}
+      className={s.bottomNavBar}
+      style={show ? {} : { display: 'none' }}
+    >
       <BottomNavigationAction
         label='Аккаунт'
         value='account'
@@ -33,7 +38,7 @@ const Nav = () => {
         icon={<ChatBubbleSharpIcon />}
         onClick={() => history.push('/chats')}
       />
-      {window.innerWidth > 1000 ? (
+      {window.innerWidth > 1024 ? (
         <BottomNavigationAction
           label='Задачи'
           value='kanban'

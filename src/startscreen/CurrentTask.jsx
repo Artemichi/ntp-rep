@@ -11,12 +11,17 @@ import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import DoneAllRoundedIcon from '@material-ui/icons/DoneAllRounded'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogTitle from '@material-ui/core/DialogTitle'
 
 const CurrentTask = () => {
   const currentUser = useContext(AuthContext)
   const [task, setTask] = useState(null)
   const [taskId, setTaskId] = useState(null)
   const [expanded, setExpanded] = useState(false)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const getTask = async () => {
@@ -42,10 +47,19 @@ const CurrentTask = () => {
       completed: true,
     })
     setTask(null)
+    handleClose()
   }
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
+  }
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
   }
 
   return (
@@ -60,13 +74,30 @@ const CurrentTask = () => {
           <Card>
             <CardHeader
               action={
-                <IconButton aria-label='done' color='primary' size='medium' onClick={() => submitTask()}>
+                <IconButton aria-label='done' color='primary' size='medium' onClick={handleClickOpen}>
                   <DoneAllRoundedIcon />
                 </IconButton>
               }
               title={task.title}
               subheader={new Date(task.date.toDate()).toLocaleDateString()}
             />
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
+            >
+              <DialogTitle id='alert-dialog-title'>Подтвердить выполнение задачи?</DialogTitle>
+
+              <DialogActions>
+                <Button onClick={handleClose} color='secondary'>
+                  Отмена
+                </Button>
+                <Button onClick={submitTask} color='primary' autoFocus>
+                  Да
+                </Button>
+              </DialogActions>
+            </Dialog>
             <CardContent>
               <Typography variant='body2' color='textSecondary' component='p'>
                 {task.description}

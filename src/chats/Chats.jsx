@@ -8,7 +8,7 @@ import ChatTextBox from './ChatTextBox'
 import Container from '@material-ui/core/Container'
 import Divider from '@material-ui/core/Divider'
 
-const Chats = () => {
+const Chats = ({ showNavBar }) => {
   const currentUser = useContext(AuthContext)
   const { uid } = currentUser
   const [selectedChat, setSelectedChat] = useState(null)
@@ -33,6 +33,9 @@ const Chats = () => {
   }, [uid])
 
   useEffect(() => {
+    if (window.innerWidth < 767) {
+      selectedChat !== null ? showNavBar(false) : showNavBar(true)
+    }
     messageRead()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChat])
@@ -78,7 +81,7 @@ const Chats = () => {
     >
       <ChatsList selectChat={setSelectedChat} chats={chats} userID={uid} selectedChatIdx={selectedChat} />
       <Divider orientation='vertical' flexItem />
-      <div style={{ flex: 2, flexDirection: 'column', height: window.innerHeight - 56 }}>
+      <div style={{ flex: 2, flexDirection: 'column' }}>
         <ChatView user={uid} chat={chats[selectedChat]} selectChat={setSelectedChat} idx={selectedChat} />
         {selectedChat !== null ? <ChatTextBox submit={submitMessage} msgRead={messageRead} /> : null}
       </div>

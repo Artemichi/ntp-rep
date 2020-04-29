@@ -41,7 +41,7 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
   useEffect(() => {
     const debounceChatListResize = debounce(() => {
       setChatListWidth(window.innerWidth)
-    }, 500)
+    }, 150)
     window.addEventListener('resize', debounceChatListResize)
     return (_) => window.removeEventListener('resize', debounceChatListResize)
   })

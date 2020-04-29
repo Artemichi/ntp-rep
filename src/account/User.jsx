@@ -28,7 +28,7 @@ const User = () => {
   }, [currentUser.uid])
 
   return (
-    <Container maxWidth='lg'>
+    <Container maxWidth='lg' style={{ marginBottom: 56 }}>
       <Profile user={userData} />
       <Paper style={{ height: 300, marginTop: '2em' }}>
         <Chart />

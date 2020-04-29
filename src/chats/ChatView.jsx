@@ -16,19 +16,19 @@ const ChatView = ({ chat, user, selectChat, idx }) => {
     if (chatViewBox) {
       chatViewBox.scrollTo(0, chatViewBox.scrollHeight)
     }
-  }, [chat])
+  }, [chat, chatHeight])
 
   useEffect(() => {
     const debounceResizeEvent = debounce(() => {
       setChatWidth(window.innerWidth)
       setChatHeight(window.innerHeight)
-    }, 500)
+    }, 150)
     window.addEventListener('resize', debounceResizeEvent)
     return (_) => window.removeEventListener('resize', debounceResizeEvent)
   })
 
   return (
-    <div style={{ height: chatHeight - 112 }}>
+    <div style={chatWidth < 767 ? { height: chatHeight - 57 } : { height: chatHeight - 113 }}>
       {idx !== null && chatWidth < 767 ? (
         <div onClick={() => selectChat(null)}>
           <IconButton aria-label='back' color='primary' size='small'>
@@ -38,7 +38,11 @@ const ChatView = ({ chat, user, selectChat, idx }) => {
         </div>
       ) : null}
       {chat ? (
-        <div className={s.content} id='chatViewBox' style={{ height: chatHeight - 160 }}>
+        <div
+          className={s.content}
+          id='chatViewBox'
+          style={chatWidth < 767 ? { height: chatHeight - 103 } : { height: chatHeight - 113 }}
+        >
           {chat.messages.map((msg, i) => {
             return (
               <Paper key={i} className={`${s.message} ${msg.sender === user ? s.userSent : s.friendSent}`} square>
