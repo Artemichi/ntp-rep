@@ -5,7 +5,7 @@ import CurrentTask from './CurrentTask'
 
 const Dashboard = () => {
   return (
-    <Container maxWidth='lg'>
+    <Container maxWidth='lg' style={{ marginBottom: 56 }}>
       <CurrentTask />
       <News />
     </Container>

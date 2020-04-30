@@ -80,7 +80,6 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
           },
         ],
       })
-    await selectChat(chats.length - 1)
   }
 
   const goToChatRoom = async (doc) => {
