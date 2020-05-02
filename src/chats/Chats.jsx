@@ -7,6 +7,8 @@ import ChatView from './ChatView'
 import ChatTextBox from './ChatTextBox'
 import Container from '@material-ui/core/Container'
 import Divider from '@material-ui/core/Divider'
+import diff from 'lodash/difference'
+import findIndex from 'lodash/findIndex'
 
 const Chats = ({ showNavBar }) => {
   const currentUser = useContext(AuthContext)
@@ -16,6 +18,7 @@ const Chats = ({ showNavBar }) => {
 
   useEffect(() => {
     let mounted = true
+    let createdChatIdx = null
     const getChats = async () => {
       app
         .firestore()
@@ -24,7 +27,19 @@ const Chats = ({ showNavBar }) => {
         .onSnapshot(async (res) => {
           if (mounted) {
             const update = res.docs.map((doc) => doc.data())
-            setChats(update)
+            setChats((prevState) => {
+              if (prevState.length === update.length || prevState.length === 0) {
+                return update
+              }
+              if (prevState.length !== update.length) {
+                const prevChats = prevState.map((e) => e.users.filter((user) => user !== uid).pop())
+                const newChats = update.map((e) => e.users.filter((user) => user !== uid).pop())
+                const change = diff(newChats, prevChats)[0]
+                createdChatIdx = findIndex(update, (o) => o.users.includes(change))
+                return update
+              }
+            })
+            if (createdChatIdx !== null) setSelectedChat(createdChatIdx)
           }
         })
     }
@@ -79,6 +94,7 @@ const Chats = ({ showNavBar }) => {
         justifyContent: 'space-between',
       }}
     >
+      <Divider orientation='vertical' flexItem />
       <ChatsList selectChat={setSelectedChat} chats={chats} userID={uid} selectedChatIdx={selectedChat} />
       <Divider orientation='vertical' flexItem />
       <div style={{ flex: 2, flexDirection: 'column' }}>

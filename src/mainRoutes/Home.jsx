@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import app from '../database/firebase'
+import { AuthContext } from '../database/Auth'
 import Nav from './Nav'
 import User from '../account/User'
 import Chats from '../chats/Chats'
@@ -8,7 +10,14 @@ import Dashboard from '../startscreen/Dashboard'
 import Board from '../kanban/Board'
 
 const Home = () => {
+  const currentUser = useContext(AuthContext)
   const [showNav, setshowNav] = useState(true)
+
+  useEffect(() => {
+    app.firestore().collection('users').doc(currentUser.uid).update({
+      status: 'Онлайн',
+    })
+  }, [currentUser])
 
   return (
     <React.Fragment>

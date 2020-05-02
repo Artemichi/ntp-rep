@@ -170,9 +170,13 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
                 chats.map((chat, i) => {
                   let friendUID = chat.users.filter((user) => user !== userID)[0]
                   return (
-                    <div key={i} style={{ cursor: 'pointer' }}>
+                    <div
+                      key={i}
+                      style={{ cursor: 'pointer' }}
+                      className={getFriendStatus(friendUID) === 'Онлайн' ? 'statusIdentifier' : null}
+                    >
                       <ListItem onClick={() => selectChat(i)} selected={selectedChatIdx === i} alignItems='flex-start'>
-                        <ListItemAvatar className={getFriendStatus(friendUID) === 'Онлайн' ? 'statusDot' : null}>
+                        <ListItemAvatar>
                           <Avatar
                             alt='chatImg'
                             src={getFriendPhoto(friendUID) === '' ? null : getFriendPhoto(friendUID)}
