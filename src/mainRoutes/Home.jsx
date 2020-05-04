@@ -19,6 +19,17 @@ const Home = () => {
     })
   }, [currentUser])
 
+  useEffect(() => {
+    window.addEventListener('beforeunload', (e) => {
+      app.firestore().collection('users').doc(currentUser.uid).update({
+        status: 'Не в сети',
+      })
+      const msg = 'Закрыть?'
+      e ? (e.returnValue = msg) : (window.event.returnValue = msg)
+      return msg
+    })
+  }, [currentUser])
+
   return (
     <React.Fragment>
       <Router>
