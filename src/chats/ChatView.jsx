@@ -45,7 +45,12 @@ const ChatView = ({ chat, user, selectChat, idx }) => {
         >
           {chat.messages.map((msg, i) => {
             return (
-              <Paper key={i} className={`${s.message} ${msg.sender === user ? s.userSent : s.friendSent}`} square>
+              <Paper
+                key={i}
+                className={`${s.message} ${msg.sender === user ? s.userSent : s.friendSent}`}
+                square
+                elevation={5}
+              >
                 {msg.message}
                 <Typography component='div' color='textSecondary' variant='caption'>
                   {new Date(msg.timestamp).toLocaleDateString()}

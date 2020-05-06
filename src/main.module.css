@@ -14,7 +14,6 @@
   align-items: center;
   margin-top: 40%;
 }
-
 .formControl {
   display: flex;
   flex-direction: column;
@@ -23,6 +22,7 @@
 }
 
 /* PROFILE */
+
 .profilePaper {
   display: flex;
   flex-direction: column;
@@ -37,31 +37,25 @@
   align-items: center;
   margin-bottom: 4em;
 }
-
 .statusLineOnline {
   border-bottom: 1px solid #4caf50;
 }
-
 .statusLineOffline {
   border-bottom: 1px solid #f44336;
 }
-
 .statusLineAway {
   border-bottom: 1px solid #ff9800;
 }
-
 .statusBar {
   display: flex;
   flex-direction: column;
   margin-bottom: 2em;
   align-items: center;
 }
-
 .statusInput {
   width: 20em;
   margin-bottom: 1.5em !important;
 }
-
 .statusBtn {
   display: flex;
 }
@@ -73,7 +67,6 @@
   padding: 2em;
   overflow-y: auto;
 }
-
 .message {
   margin-bottom: 1em;
   font-size: 1rem;
@@ -88,7 +81,6 @@
   border-top-right-radius: 1em;
   border-bottom-left-radius: 1em;
   text-align: right;
-  box-shadow: inset -1px -1px 0 0 #3f51b5 !important;
 }
 .friendSent {
   float: left;
@@ -96,7 +88,6 @@
   border-bottom-right-radius: 1em;
   border-bottom-left-radius: 1em;
   text-align: left;
-  box-shadow: inset 1px 1px 0 0 #3f51b5 !important;
 }
 
 @media screen and (max-width: 767px) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import PropTypes from 'prop-types'
 import app from '../database/firebase'
 import { debounce } from '../debounce'
@@ -10,15 +10,14 @@ import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import MailOutlineRoundedIcon from '@material-ui/icons/MailOutlineRounded'
 import Menu from '@material-ui/core/Menu'
 import TextField from '@material-ui/core/TextField'
 
-const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
+const ChatsList = memo(({ selectChat, chats, userID, selectedChatIdx }) => {
   const [users] = useState(new Map())
-  const [loading, setLoading] = useState(true)
+  const [updating, setUpdating] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const [searchInput, setSearchInput] = useState('')
   const [chatListWidth, setChatListWidth] = useState(window.innerWidth)
@@ -32,11 +31,13 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
           snapshot.forEach(async (doc) => {
             users.set(doc.id, doc.data())
           })
+          setUpdating((prev) => !prev)
         })
-      setLoading(false)
     }
     getUsers()
   }, [users])
+
+  useEffect(() => {}, [updating])
 
   useEffect(() => {
     const debounceChatListResize = debounce(() => {
@@ -151,9 +152,10 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
                     pickNewChat(key)
                   }}
                   key={idx}
+                  style={{ cursor: 'pointer' }}
                 >
                   <ListItemAvatar>
-                    <Avatar alt='chatImg' src={getFriendPhoto(key) === '' ? null : getFriendPhoto(key)}>
+                    <Avatar alt='USER_IMG' src={getFriendPhoto(key) === '' ? null : getFriendPhoto(key)}>
                       {getFriendPhoto(key) === '' ? getFriendName(key).split('')[0] : null}
                     </Avatar>
                   </ListItemAvatar>
@@ -162,62 +164,59 @@ const ChatsList = ({ selectChat, chats, userID, selectedChatIdx }) => {
               ) : null
             )}
           </Menu>
-          {loading ? (
-            <LinearProgress />
-          ) : (
-            <List>
-              {chats.length !== 0 ? (
-                chats.map((chat, i) => {
-                  let friendUID = chat.users.filter((user) => user !== userID)[0]
-                  return (
-                    <div
-                      key={i}
-                      style={{ cursor: 'pointer' }}
-                      className={getFriendStatus(friendUID) === 'Онлайн' ? 'statusIdentifier' : null}
-                    >
-                      <ListItem onClick={() => selectChat(i)} selected={selectedChatIdx === i} alignItems='flex-start'>
-                        <ListItemAvatar>
-                          <Avatar
-                            alt='chatImg'
-                            src={getFriendPhoto(friendUID) === '' ? null : getFriendPhoto(friendUID)}
-                          >
-                            {getFriendPhoto(friendUID) === '' ? getFriendName(friendUID).split('')[0] : null}
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={getFriendName(friendUID)}
-                          secondary={
-                            <React.Fragment>
-                              <Typography component='span' color='textSecondary' variant='caption'>
-                                {chat.messages[chat.messages.length - 1].sender === userID
-                                  ? `Вы: ${chat.messages[chat.messages.length - 1].message.substring(0, 20)}`
-                                  : chat.messages[chat.messages.length - 1].message.substring(0, 20)}
-                              </Typography>
-                            </React.Fragment>
-                          }
-                        ></ListItemText>
-                        {chat.receiverHasRead === false && !userIsSender(chat) ? (
-                          <ListItemIcon>
-                            <MailOutlineRoundedIcon color='primary' />
-                          </ListItemIcon>
-                        ) : null}
-                      </ListItem>
-                      <Divider />
-                    </div>
-                  )
-                })
-              ) : (
-                <ListItem>
-                  <ListItemText primary='Нет текущих чатов' secondary='Что бы начать новый чат выберите собеседника' />
-                </ListItem>
-              )}
-            </List>
-          )}
+
+          <List>
+            {chats && chats.length !== 0 ? (
+              chats.map((chat, i) => {
+                let friendUID = chat.users.filter((user) => user !== userID)[0]
+                return (
+                  <div
+                    key={i}
+                    style={{ cursor: 'pointer' }}
+                    className={getFriendStatus(friendUID) === 'Онлайн' ? 'statusIdentifier' : null}
+                  >
+                    <ListItem onClick={() => selectChat(i)} selected={selectedChatIdx === i} alignItems='flex-start'>
+                      <ListItemAvatar>
+                        <Avatar
+                          alt='USER_IMG'
+                          src={getFriendPhoto(friendUID) === '' ? null : getFriendPhoto(friendUID)}
+                        >
+                          {getFriendPhoto(friendUID) === '' ? getFriendName(friendUID).split('')[0] : null}
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={getFriendName(friendUID)}
+                        secondary={
+                          <React.Fragment>
+                            <Typography component='span' color='textSecondary' variant='caption'>
+                              {chat.messages[chat.messages.length - 1].sender === userID
+                                ? `Вы: ${chat.messages[chat.messages.length - 1].message.substring(0, 20)}`
+                                : chat.messages[chat.messages.length - 1].message.substring(0, 20)}
+                            </Typography>
+                          </React.Fragment>
+                        }
+                      ></ListItemText>
+                      {chat.receiverHasRead === false && !userIsSender(chat) ? (
+                        <ListItemIcon>
+                          <MailOutlineRoundedIcon color='primary' />
+                        </ListItemIcon>
+                      ) : null}
+                    </ListItem>
+                    <Divider />
+                  </div>
+                )
+              })
+            ) : (
+              <ListItem>
+                <ListItemText primary='Нет текущих чатов' secondary='Что бы начать новый чат выберите собеседника' />
+              </ListItem>
+            )}
+          </List>
         </div>
       )}
     </>
   )
-}
+})
 
 export default ChatsList
 

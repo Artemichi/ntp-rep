@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import SaveIcon from '@material-ui/icons/Save'
 import IconButton from '@material-ui/core/IconButton'
+import { useTheme } from '@material-ui/core/styles'
 
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return
@@ -47,6 +48,7 @@ const onDragEnd = (result, columns, setColumns) => {
 const Board = () => {
   const [columns, setColumns] = useState(null)
   const [projectInfo, setProjectInfo] = useState(null)
+  const theme = useTheme()
 
   useEffect(() => {
     app
@@ -70,7 +72,7 @@ const Board = () => {
     <>
       {columns !== null ? (
         <>
-          <Typography variant='h3' gutterBottom align='center'>
+          <Typography variant='h3' gutterBottom align='center' color='textPrimary'>
             {`${projectInfo.title} (${projectInfo.stage})`}
           </Typography>
           <div style={{ position: 'absolute', top: 0, right: 0 }}>
@@ -90,7 +92,7 @@ const Board = () => {
                     }}
                     key={columnId}
                   >
-                    <Typography variant='h5' gutterBottom>
+                    <Typography variant='h5' gutterBottom color='textPrimary'>
                       {column.name}
                     </Typography>
                     <div style={{ margin: 8 }}>
@@ -101,11 +103,11 @@ const Board = () => {
                               {...provided.droppableProps}
                               ref={provided.innerRef}
                               style={{
-                                background: '#fafafa',
+                                background: theme.palette.background.default,
                                 padding: 20,
                                 width: 300,
                                 minHeight: 600,
-                                border: '1px solid #3f51b5',
+                                border: `1px solid ${theme.palette.primary.main}`,
                                 borderRadius: 8,
                               }}
                             >

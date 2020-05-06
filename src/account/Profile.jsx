@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import app from '../database/firebase'
 import s from '../main.module.css'
 import { AuthContext } from '../database/Auth'
+import { DarkMode } from '../App'
 import Avatar from '@material-ui/core/Avatar'
 import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
@@ -15,12 +16,14 @@ import Button from '@material-ui/core/Button'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import Badge from '@material-ui/core/Badge'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
+import Brightness4Icon from '@material-ui/icons/Brightness4'
 
 const Profile = ({ user }) => {
   const [status, setStatus] = useState('')
   const [open, setOpen] = useState(false)
   const [uploadComplete, setUploadComplete] = useState(false)
   const currentUser = useContext(AuthContext)
+  const setdarkMode = useContext(DarkMode)
 
   useEffect(() => {
     setStatus(user.status)
@@ -59,9 +62,12 @@ const Profile = ({ user }) => {
   }
 
   return (
-    <Paper className={s.profilePaper}>
+    <Paper className={s.profilePaper} square>
       <div style={{ alignSelf: 'flex-end', marginBottom: '2em' }}>
-        <IconButton className={s.logout} aria-label='logout' color='primary' onClick={() => app.auth().signOut()}>
+        <IconButton aria-label='theme' color='primary' onClick={() => setdarkMode((mode) => !mode)}>
+          <Brightness4Icon />
+        </IconButton>
+        <IconButton aria-label='logout' color='primary' onClick={() => app.auth().signOut()}>
           <ExitToAppIcon />
         </IconButton>
       </div>

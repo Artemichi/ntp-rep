@@ -30,7 +30,7 @@ const User = () => {
   return (
     <Container maxWidth='lg' style={{ marginBottom: 56 }}>
       <Profile user={userData} />
-      <Paper style={{ height: 300, marginTop: '2em' }}>
+      <Paper style={{ height: 340, marginTop: '1em' }} square>
         <Chart />
       </Paper>
     </Container>

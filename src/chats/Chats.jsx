@@ -28,18 +28,15 @@ const Chats = ({ showNavBar }) => {
           if (mounted) {
             const update = res.docs.map((doc) => doc.data())
             setChats((prevState) => {
-              if (prevState.length === update.length || prevState.length === 0) {
-                return update
-              }
-              if (prevState.length !== update.length) {
+              if (update.length === prevState.length + 1) {
                 const prevChats = prevState.map((e) => e.users.filter((user) => user !== uid).pop())
                 const newChats = update.map((e) => e.users.filter((user) => user !== uid).pop())
                 const change = diff(newChats, prevChats)[0]
                 createdChatIdx = findIndex(update, (o) => o.users.includes(change))
-                return update
               }
+              return update
             })
-            if (createdChatIdx !== null) setSelectedChat(createdChatIdx)
+            if (createdChatIdx && createdChatIdx !== -1) setSelectedChat(createdChatIdx)
           }
         })
     }

@@ -21,15 +21,6 @@ body {
   background-color: #3f51b5;
 }
 
-.MuiListItem-root {
-  background-color: #fafafa !important;
-}
-
-.MuiListItem-root.Mui-selected {
-  background-color: #ffffff !important;
-  box-shadow: inset -2px 0 0 0 #3f51b5 !important;
-}
-
 .MuiIconButton-root {
   padding: 11px !important;
 }
@@ -44,6 +35,5 @@ body {
 }
 
 .statusIdentifier {
-  cursor: pointer;
   box-shadow: -1px 0 0 0 #4caf50;
 }
