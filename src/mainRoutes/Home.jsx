@@ -5,7 +5,7 @@ import { AuthContext } from '../database/Auth'
 import Nav from './Nav'
 import User from '../account/User'
 import Chats from '../chats/Chats'
-import UserQRcode from '../qrcode/QRcode'
+import UserCard from '../qrcode/BusinessCard'
 import Dashboard from '../startscreen/Dashboard'
 import Board from '../kanban/Board'
 
@@ -39,7 +39,7 @@ const Home = () => {
           <Route exact path='/user' component={User} />
           <Route exact path='/chats' render={(props) => <Chats showNavBar={setshowNav} {...props} />} />
           <Route exact path='/kanban' component={Board} />
-          <Route exact path='/code' component={UserQRcode} />
+          <Route exact path='/card' component={UserCard} />
         </Switch>
       </Router>
     </React.Fragment>

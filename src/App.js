@@ -17,7 +17,7 @@ const App = () => {
   return (
     <AuthProvider>
       <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-        <DarkMode.Provider value={setdarkMode}>
+        <DarkMode.Provider value={{ darkMode, setdarkMode }}>
           <Router>
             <PrivateRoute exact path='/' component={Home} />
             <Route exact path='/login' component={Login} />

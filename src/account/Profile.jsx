@@ -16,14 +16,15 @@ import Button from '@material-ui/core/Button'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import Badge from '@material-ui/core/Badge'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
-import Brightness4Icon from '@material-ui/icons/Brightness4'
+import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh'
+import Brightness5Icon from '@material-ui/icons/Brightness5'
 
 const Profile = ({ user }) => {
   const [status, setStatus] = useState('')
   const [open, setOpen] = useState(false)
   const [uploadComplete, setUploadComplete] = useState(false)
   const currentUser = useContext(AuthContext)
-  const setdarkMode = useContext(DarkMode)
+  const { darkMode, setdarkMode } = useContext(DarkMode)
 
   useEffect(() => {
     setStatus(user.status)
@@ -65,7 +66,7 @@ const Profile = ({ user }) => {
     <Paper className={s.profilePaper} square>
       <div style={{ alignSelf: 'flex-end', marginBottom: '2em' }}>
         <IconButton aria-label='theme' color='primary' onClick={() => setdarkMode((mode) => !mode)}>
-          <Brightness4Icon />
+          {darkMode ? <BrightnessHighIcon /> : <Brightness5Icon />}
         </IconButton>
         <IconButton aria-label='logout' color='primary' onClick={() => app.auth().signOut()}>
           <ExitToAppIcon />

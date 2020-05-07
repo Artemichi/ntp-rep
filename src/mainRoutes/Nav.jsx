@@ -49,10 +49,10 @@ const Nav = ({ show }) => {
 
       {window.innerWidth < 767 ? (
         <BottomNavigationAction
-          label='QR-код'
-          value='code'
+          label='Визитка'
+          value='card'
           icon={<CropFreeIcon />}
-          onClick={() => history.push('/code')}
+          onClick={() => history.push('/card')}
         />
       ) : null}
     </BottomNavigation>
