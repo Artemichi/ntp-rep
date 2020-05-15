@@ -10,7 +10,7 @@ import { darkTheme, lightTheme } from './themes'
 export const DarkMode = createContext()
 
 const App = () => {
-  const [darkMode, setdarkMode] = useState(false)
+  const [darkMode, setdarkMode] = useState(JSON.parse(localStorage.getItem('darkMode')) || false)
 
   darkMode ? (document.body.style.backgroundColor = '#303030') : (document.body.style.backgroundColor = null)
 

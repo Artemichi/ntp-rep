@@ -62,10 +62,15 @@ const Profile = ({ user }) => {
     await delay(4000).then(() => setUploadComplete(false))
   }
 
+  const changeTheme = () => {
+    localStorage.setItem('darkMode', JSON.stringify(!darkMode))
+    setdarkMode((mode) => !mode)
+  }
+
   return (
     <Paper className={s.profilePaper} square>
       <div style={{ alignSelf: 'flex-end', marginBottom: '2em' }}>
-        <IconButton aria-label='theme' color='primary' onClick={() => setdarkMode((mode) => !mode)}>
+        <IconButton aria-label='theme' color='primary' onClick={changeTheme}>
           {darkMode ? <BrightnessHighIcon /> : <Brightness5Icon />}
         </IconButton>
         <IconButton aria-label='logout' color='primary' onClick={() => app.auth().signOut()}>
